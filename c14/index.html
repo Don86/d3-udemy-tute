@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<title>14 - Loading data from CSV/JSON</title>
+	<!-- D3v5.minified cdn -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js"></script>
+</head>
+
+
+<body>
+	<script>
+		/*Run local server with $ python -m http.server*/
+
+		d3.csv("my_data.csv").then(function(data){
+			console.log(data)
+
+			// convert age strings to integers
+			data.forEach(function(d){
+				d.age = +d.age
+			})
+
+			var svg = d3.select("body").append("svg")
+			.attr("width", 400)
+			.attr("height", 400);
+
+			var circles = svg.selectAll("circle").data(data);
+
+			circles.enter().append("circle")
+				.attr("cx", function (d, i) {
+					console.log("Item: " + d, "Index: " + i);
+					return (i * 50) + 25;
+				})
+				.attr("cy", 25)
+				.attr("r", function(d){
+					console.log("Item: " + d);
+					return d.age * 2;
+				})
+				.attr("fill", "red");
+		})
+	</script>
+</body>
+</html>
